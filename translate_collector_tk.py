@@ -91,6 +91,6 @@ linktext.grid(row=3, column=0)
 linkbutton=tk.Button(text="ok",command=start,font="Sans 15",width=8)
 linkbutton.grid(row=3, column=10)
 root.mainloop()
-for i,j in maintranslator.items:
+for i,j in maintranslator.items():
     print(i,j)
 clt.exit()
