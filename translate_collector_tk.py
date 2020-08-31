@@ -24,11 +24,8 @@ def condition(s,n):
 
 maintranslator={}
 def maintranslatoradd(st):
-    if st in maintranslator:
-        maintranslator[st]+=1
-    else:
-        maintranslator[st]=1
-
+    if st in maintranslator:maintranslator[st]+=1
+    else:maintranslator[st]=1
     
 class collector(threading.Thread):
     def __init__(self):
@@ -70,7 +67,6 @@ class collector(threading.Thread):
 clt=collector()
 clt.start()
 def start():
-    
     try:
         a= linktext.get("1.0",'end-1c')
         text.insert(1.0,'collecting\n > '+ a+'\n')
