@@ -15,5 +15,5 @@ I prefer tkinker version
 
 If you don't have a video to test ther will always be translator on sheep chanel.Try it there!
 
-PS: case sensitive that O have founded and add to my code
+PS: case sensitive that I have founded and add to my code
 [en] [eng] [EN] [ENG] 【en】【eng】(en) (eng) [(smth)/en] or "she is talking about something" ore even with out[en] but use "she:smth" instead...
