@@ -58,8 +58,8 @@ class collector(threading.Thread):
                             for c in self.chatdata.items:
                                 d=condition(c.message,c.author)
                                 if d:
-                                    sendertext.insert(1.0,f"[ >{c.author.name}]")
                                     maintranslatoradd(c.author.name)
+                                    sendertext.insert(1.0,f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
                                     text.insert(1.0,d)
                                 self.chatdata.tick()
                         except KeyboardInterrupt:
