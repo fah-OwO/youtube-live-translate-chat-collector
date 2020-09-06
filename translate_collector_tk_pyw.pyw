@@ -5,6 +5,14 @@ import codecs
 import threading
 import datetime
 import googletrans as gt
+
+# if you dont want this window to be on top delete this line: "root.attributes("-topmost", True) "
+
+# how to use :run this and put link on lowest tab and click ok
+# (optional) you can add temporary keyword ore favorite translate by using middle tab and click add keyword/member button
+# (can edit in code) there will be "sender:" tab which show sender and sending counting
+# good luck and welcome to rabbit hole (kusa)
+
 translator = gt.Translator()
 keyword={'talking about'}
 member={'Fah','サトウスズキ'}                  #if there is a usual translator you can input there name here
@@ -100,7 +108,7 @@ def addkeywordbutton(root,row,columnspan):
             else:set.add(a)
         elif 'remove' ==mode:
             if a in set:set.remove(a)
-            else:s='no "'+a+'" in'+setname# text.insert(1.0,'no '+a+' in '+string.replace('remove',''))
+            else:s='no "'+a+'" in'+setname
         text.insert(1.0,s+'\n'+setname+' now :\n'+str(set)+'\n\n')
     
     addkeyword=tk.Button(text="add key word",command=lambda:duty(keyword,'add','key word'),font="Sans 10",width=12)
@@ -115,7 +123,7 @@ def addkeywordbutton(root,row,columnspan):
 
 root = tk.Tk()
 root.title("translate collector")
-root.attributes("-topmost", True)
+root.attributes("-topmost", True)                                               #always on top of all window
 root.bind('<Escape>', lambda e: root.quit())
 text = tk.Text(root,height=18,width=30,font="Sans 24",padx=30,pady=30)
 text.grid(row=0,columnspan=20)
