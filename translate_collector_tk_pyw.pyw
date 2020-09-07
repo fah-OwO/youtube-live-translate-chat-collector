@@ -3,7 +3,6 @@ import tkinter as tk
 from pytchat import LiveChat
 import codecs
 import threading
-import datetime
 import googletrans as gt
 
 # if you dont want this window to be on top delete this line: "root.attributes("-topmost", True) "
@@ -15,28 +14,28 @@ import googletrans as gt
 
 translator = gt.Translator()
 keyword={'talking about'}
-member={'Fah','サトウスズキ'}                  #if there is a usual translator you can input there name here
-emoji='[ ] ( ) < >'.split()+[str(i) for i in range(10)]
+member={'Fah','サトウスズキ'}                    # if there is a usual translator you can input there name here
+emoji='[ ] ( ) < >'.split()+[str(i) for i in range(10)] # add this to avoid catching sentence with ':'  some say "it's 12:30 pm  right now" or "sadddddd :["
 def condition(s,n):
     z=s.lower()
     a=z.find('en')
     if a>0:
-        if z[a-1]in '[【(' or z.find(']',a)>a:
+        if z[a-1]in '[【(' or z.find(']',a)>a:  # if [en] 【en】(en) or [smth/en]
             return f"{s}\n\n" 
-    if  any(word in s for word in keyword):
-        return f"{s}\n\n"                       #some time they will translate as"[EN]:she is talking about..."
-    if n.isVerified:                            #eg. "Subaru Ch. 大空スバル​あじ！"
+    if  any(word in s for word in keyword):     # look at line 16 to adjust keyword
+        return f"{s}\n\n"                       # some time they will translate as"[EN]:she is talking about..."
+    if n.isVerified:                            # eg. "Subaru Ch. 大空スバル​あじ！"
         en=translator.translate(s,dest="en")
         if en.src=='en':return f" > {n.name}\n{s}\n\n"          
         else:return f" > {n.name}\n{s}\nTranslate from{en.src}\n{en.text}\n\n" 
     if any(name ==n.name for name in member):return f" > {n.name}\n{s}\n\n"
     a=s.find(":")
-    if a!=-1 and s.find(":",a)==-1:
-        if len(s)-a<=3:return False
-        if z[a:a+3]in [': 3',':ze']:return False
-        if s[a+1] not in emoji:
-            return f"{s}\n\n"                   #some time it will be like "subaru:she is talking about" and I use count as 1 because there will be emoticon like :":_ナンバー1:" or ":_にこにこ:"
-    return False                                #you can add case condition by your self
+    if a!=-1 and s.find(":",a)==-1:             
+        if len(s)-a<=3:return False             # some says "hi i like this:)"
+        if z[a:a+3]in [': 3',':ze']:return False# some dudes say"re:zero"
+        if s[a+1] not in emoji:                 # look at line 18
+            return f"{s}\n\n"                   # some time it will be like "subaru:she is talking about" and I use count as 1 because there will be emoticon like :":_ナンバー1:" or ":_にこにこ:"
+    return False                                # you can add case condition by your self
 
 maintranslator={}
 def maintranslatoradd(st):
@@ -52,7 +51,6 @@ class collector(threading.Thread):
         self.livechat=''
         self.program_running=True
         self.running=False
-        # self.t=time.time()
         
     def setlink(self,link):
         if 'youtube' in link:self.livechat = LiveChat(link)
