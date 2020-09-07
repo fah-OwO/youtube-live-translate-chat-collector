@@ -1,9 +1,7 @@
-import time
 from pytchat import LiveChat
 a=input('link:')
 if 'youtube' in a:livechat = LiveChat(a)
 else:livechat = LiveChat(video_id = a)
-t=time.time()
 
 def condition(s,n):
     if n.name=='Fah':
@@ -24,10 +22,6 @@ while livechat.is_alive():
         for c in chatdata.items:
             if condition(c.message,c.author):
                 print(f" > {c.message}")
-                t=time.time()
-            elif 'a' in c.message and time.time()-t >=60:
-                print(f"- {c.message}")
-                t=time.time()
             chatdata.tick()
     except KeyboardInterrupt:
         livechat.terminate()
