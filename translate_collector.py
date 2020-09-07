@@ -8,7 +8,8 @@ t=time.time()
 def condition(s,n):
     if n.name=='Fah':
         return True         #if there is a usual translator you can input there name here
-    if '[en]' in s or '[EN]' in s:
+    z=s.lower()
+    if 'en]' in z or '[en' in z or u'【en' in z or u'(en' in z or 'talking about' in z:
         return True         #some time they will translate as"[EN]:she is talking about..."
     if n.isVerified:
         return True         #check if there is some channel comment?if its japanese you can use translate with in https://github.com/fah-OwO/realtime-auto-translate-using-clipboard/blob/master/autotranslate.py
@@ -24,10 +25,13 @@ while livechat.is_alive():
             if condition(c.message,c.author):
                 print(f" > {c.message}")
                 t=time.time()
-            elif 'a' in c.message and time.time()-t >=5:
+            elif 'a' in c.message and time.time()-t >=60:
                 print(f"- {c.message}")
                 t=time.time()
             chatdata.tick()
     except KeyboardInterrupt:
         livechat.terminate()
         break
+
+print("live chat end")
+input("press enter to exit")
