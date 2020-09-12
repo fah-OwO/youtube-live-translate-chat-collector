@@ -30,7 +30,7 @@ def condition(s,n):
         else:return f" > {n.name}\n{s}\nTranslate from{en.src}\n{en.text}\n\n" 
     if any(name ==n.name for name in member):return f" > {n.name}\n{s}\n\n"
     a=s.find(":")
-    if a!=-1 and s.find(":",a)==-1:             
+    if a!=-1 and s.find(":",a+1)==-1:             
         if len(s)-a<=3:return False             # some says "hi i like this:)"
         if z[a:a+3]in [': 3',':ze']:return False# some dudes say"re:zero"
         if s[a+1] not in emoji:                 # look at line 18
