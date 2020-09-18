@@ -24,10 +24,10 @@ def condition(s,n):
             return f"{s}\n\n" 
     if  any(word in s for word in keyword):     # look at line 16 to adjust keyword
         return f"{s}\n\n"                       # some time they will translate as"[EN]:she is talking about..."
-    if n.isVerified:                            # eg. "Subaru Ch. 大空スバル​あじ！"
+    if n.isVerified and "ch" in n.name.lower():                            # eg. "Subaru Ch. 大空スバル​あじ！"
         en=translator.translate(s,dest="en")
         if en.src=='en':return f" > {n.name}\n{s}\n\n"          
-        else:return f" > {n.name}\n{s}\nTranslate from{en.src}\n{en.text}\n\n" 
+        else:return f" > {n.name}\n{s}\n({en.text})\n\n" 
     if any(name ==n.name for name in member):return f" > {n.name}\n{s}\n\n"
     a=s.find(":")
     if a!=-1 and s.find(":",a+1)==-1:             
