@@ -1,7 +1,6 @@
 from pytchat import LiveChat
 a=input('link:')
-if 'youtube' in a:livechat = LiveChat(a)
-else:livechat = LiveChat(video_id = a)
+livechat = LiveChat(a)
 
 def condition(s,n):
     if n.name=='Fah':
@@ -14,7 +13,6 @@ def condition(s,n):
     if s.count(':')==1:
         return True         #some time it will be like "subaru:she is talking about" and I use count as 1 because there will be emoticon like :":_ナンバー1:" or ":_にこにこ:"
     return False            #you can add case condition by your self
-print('start with - to show that this application is running (it will appear every 5 seconds)")
 print("start with > to show that those message match translate message condition")
 while livechat.is_alive():
     try:
