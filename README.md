@@ -8,13 +8,15 @@ When I am watching Hololive there will be some guy translate with start message 
 4) check your clip what translator will always translate as and at case/sensitive case in condition()
 5) enjoy~~
 
-There are 3 versions 
+There are 4 versions 
 
 python shell  : it will read up to down as normal
 
 tkinter       : it will read down to upper according from past to present
 
 tkintet pyw   : use with pythonw.exe have an option to add keyword and member while running(or you can run normally as .py)
+
+for Android   : now developing... I am using Pydroid3 in android
 
 I prefer tkinker version 
 
