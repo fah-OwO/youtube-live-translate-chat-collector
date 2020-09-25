@@ -1,4 +1,4 @@
-# import time
+
 from time import sleep
 import tkinter as tk
 from pytchat import LiveChat
@@ -14,16 +14,16 @@ def condition(s,n):
         try:
             en=translator.translate(s,dest="en")
             tmp=en.src
-        except: return f" > {n.name}\n{s}\n\n"  
-        if tmp=='en':return f" > {n.name}\n{s}\n\n"          
-        else:return f" > {n.name}\n{s}\n{en.text}\n\n" 
+        except: return f"{s}"  
+        if tmp=='en':return f"{s}"          
+        else:return f"{s}\n{en.text}" 
     z=s.lower()
     a=z.find('en')
     if a>0:
         if any(z.rfind(char1,0,a)!=-1 and z.find(char2,a)!=-1 for char1,char2 in zip('[(【','])】')) :
-            return f"{s}\n\n" 
+            return f"{s}" 
     if  any(word in s for word in keyword):
-        return f"{s}\n\n"                       
+        return f"{s}"                       
     if n.isVerified:
         return t(s,n)
     if any(name ==n.name for name in member):
@@ -33,7 +33,7 @@ def condition(s,n):
         if len(s)-a<=3:return False
         if z[a:a+3]in (': 3',':ze'):return False
         if s[a+1] not in emoji:
-            return f"{s}\n\n"                   
+            return f"{s}"                   
     return False                                
 
 maintranslator={}
@@ -52,8 +52,7 @@ class collector(thr):
         
         
     def setlink(self,link):
-        if 'youtube' in link:self.livechat = LiveChat(link)
-        else:self.livechat = LiveChat(video_id = link)
+        self.livechat = LiveChat(link)
         self.running=True
 
     def exit(self):
@@ -62,31 +61,27 @@ class collector(thr):
 
     def run(self):
         while self.program_running:
-            while self.running:
-                while self.livechat.is_alive():
-                    if self.program_running:
-                        try:
-                            try:self.chatdata = self.livechat.get()
-                            except:break
-                            for c in self.chatdata.items:
-                                d=condition(c.message,c.author)
-                                if d:
-                                    maintranslatoradd(c.author.name)
-                                    print(f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
-                                    print(d)
-                                    
-                                self.chatdata.tick()
-                        except KeyboardInterrupt:
-                            self.livechat.terminate()
-                else:
+            while self.running and self.livechat.is_alive():
+                try:
+                    try:self.chatdata = self.livechat.get()
+                    except:break
+                    for c in self.chatdata.items:
+                        d=condition(c.message,c.author)
+                        if d:
+                            maintranslatoradd(c.author.name)
+                            print(f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
+                            print(d,end="\n\n")
+                        self.chatdata.tick()
+                except KeyboardInterrupt:
+                    self.livechat.terminate()
+                except Exception as e:
+                    print(e)
                     break
             sleep(0.1)
         return True
-    
 clt=collector()
 clt.start()
 def start(a):
-    
     try:
         a= a
         print('collecting\n > '+ a+'\n')
@@ -94,9 +89,14 @@ def start(a):
     except Exception as e:
         print(e)
 
-# def addkeyword():
-ds={'key word':keyword,'member':member}
-def duty(a,mode='add',setname='key word'):
+ds={'keyword':keyword,'member':member}
+def duty(a,mode='add',setname='keyword'):
+    # print(a,mode,setname,type(a))
+    if type(a)==type(list()):
+        if len (a)==1:a=a[0]
+        elif len (a)==2:a,mode=a[:]
+        elif len (a)==3:a,mode,setname=a[:]
+        else:return
     set=ds[setname]
     s=mode+' '+setname+': "'+ a+'"'
     if 'add' ==mode:
@@ -106,24 +106,28 @@ def duty(a,mode='add',setname='key word'):
         if a in set:set.remove(a)
         else:s='no "'+a+'" in'+setname
     print(1.0,s+'\n'+setname+' now :\n'+str(set)+'\n\n')
-    print(set)
     
     
 start(input('link:'))
-print("command:\n\texit\n\tlist:\n\t(smt) add keyword")
+print("command:\n\texit\n\tlink:\n\t(smt) add keyword")
 while clt.running:
     a=input()
     if a=="exit":
-        clt.exit()
-        exit()
+        break
     elif a[:5]=="link:":
         start(a[5:])
+    elif a[:5]=="eval:":
+        try :eval(a[5:])
+        except Exception as e:print(e)
+    elif len(a)<1:
+        continue
     else:
-        duty(a.split)
+        a=a.split()
+        try:duty(a)
+        except Exception as e:print(e)
 
 
 for i,j in maintranslator.items():
     print(i,':',j)
 clt.exit()
-print("live chat end")
 input("press enter to exit")
