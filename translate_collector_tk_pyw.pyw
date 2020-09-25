@@ -48,19 +48,21 @@ def maintranslatoradd(st):
 class collector(threading.Thread):
     def __init__(self):
         super(collector,self).__init__()
-        self.livechat=''
+        self.livechat=False
         self.program_running=True
         self.running=False
         
     def setlink(self,link):
-        if 'youtube' in link:self.livechat = LiveChat(link)
-        else:self.livechat = LiveChat(video_id = link)
+        if self.livechat:
+            self.livechat.terminate()
+        self.livechat = LiveChat(link)
         self.running=True
 
     def exit(self):
+        self.livechat.terminate()
         self.running=False
         self.program_running=False
-
+        
     def run(self):
         while self.program_running:
             while self.running:
