@@ -1,9 +1,10 @@
-
-from time import sleep
+import time
+# from time import time.sleep
 import tkinter as tk
 from pytchat import LiveChat
 from threading import Thread as thr
 from googletrans import Translator as gt
+starttime=time.time()
 translator = gt()
 keyword={'talking about'}
 member=set()
@@ -46,16 +47,19 @@ def maintranslatoradd(st):
 class collector(thr):
     def __init__(self):
         super(collector,self).__init__()
-        self.livechat=''
+        self.livechat=False
         self.program_running=True
         self.running=False
         
         
     def setlink(self,link):
+        if self.livechat:
+            self.livechat.terminate()
         self.livechat = LiveChat(link)
         self.running=True
 
     def exit(self):
+        self.livechat.terminate()
         self.running=False
         self.program_running=False
 
@@ -63,9 +67,9 @@ class collector(thr):
         while self.program_running:
             while self.running and self.livechat.is_alive():
                 try:
-                    try:self.chatdata = self.livechat.get()
-                    except:break
+                    self.chatdata = self.livechat.get()
                     for c in self.chatdata.items:
+                        if not self.running:break
                         d=condition(c.message,c.author)
                         if d:
                             maintranslatoradd(c.author.name)
@@ -74,11 +78,11 @@ class collector(thr):
                         self.chatdata.tick()
                 except KeyboardInterrupt:
                     self.livechat.terminate()
+                    break
                 except Exception as e:
                     print(e)
                     break
-            sleep(0.1)
-        return True
+            time.sleep(0.1)
 clt=collector()
 clt.start()
 def start(a):
@@ -89,6 +93,7 @@ def start(a):
     except Exception as e:
         print(e)
 
+# def addkeyword():
 ds={'keyword':keyword,'member':member}
 def duty(a,mode='add',setname='keyword'):
     # print(a,mode,setname,type(a))
@@ -110,7 +115,7 @@ def duty(a,mode='add',setname='keyword'):
     
 start(input('link:'))
 print("command:\n\texit\n\tlink:\n\t(smt) add keyword")
-while clt.running:
+while True:
     a=input()
     if a=="exit":
         break
@@ -126,8 +131,8 @@ while clt.running:
         try:duty(a)
         except Exception as e:print(e)
 
-
+# print("translator statistic")
+print("time:",time.time()-starttime)
 for i,j in maintranslator.items():
     print(i,':',j)
 clt.exit()
-input("press enter to exit")
