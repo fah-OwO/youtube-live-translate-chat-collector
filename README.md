@@ -10,13 +10,13 @@ When I am watching Hololive there will be some guy translate with start message 
 
 There are 4 versions 
 
-python shell  : it will read up to down as normal
+python shell  : (easiest to modfy)    it will read up to down as normal
 
 tkinter       : it will read down to upper according from past to present
 
-tkintet pyw   : use with pythonw.exe have an option to add keyword and member while running(or you can run normally as .py)
+tkintet pyw   : (best)        use with pythonw.exe have an option to add keyword and member while running(or you can run normally as .py)
 
-for Android   : now developing... I am using Pydroid3 in android
+for Android   : (Success?)    using Pydroid3 in android copy and press this
 
 I prefer tkinker version 
 
@@ -24,3 +24,5 @@ If you don't have a video to test ther will always be translator on sheep chanel
 
 PS: case sensitive that I have founded and add to my code
 [en] [eng] [EN] [ENG] 【en】【eng】(en) (eng) [(smth)/en]([英訳/EN]) or "she is talking about something" ore even with out[en] but use "she:smth" instead...
+
+PS2: if you use formobile/ Tkinter pyw Version you can modify keyword by your self while running~~~~
