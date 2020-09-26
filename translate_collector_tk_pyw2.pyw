@@ -3,13 +3,21 @@ import tkinter as tk
 from pytchat import LiveChat
 from threading import Thread as thr
 from googletrans import Translator as gt
+
+# if you dont want this window to be on top delete this line: "root.attributes("-topmost", True) "
+
+# how to use :run this and put link on lowest tab and click ok
+# (optional) you can add temporary keyword ore favorite translate by using middle tab and click add keyword/member button
+# (can edit in code) there will be "sender:" tab which show sender and sending counting
+# good luck and welcome to rabbit hole (kusa)
+
 starttime=time.time()
 translator = gt()
 keyword={'talking about'}
-member=set()
-emoji='[',']' ,'(' ,')' ,'<' ,'>','0','1','2','3','4','5','6','7','8','9'
+member=set()                                    # if there is a usual translator you can input there name here
+emoji='[',']' ,'(' ,')' ,'<' ,'>','0','1','2','3','4','5','6','7','8','9'       # add this to avoid catching sentence with ':'  some say "it's 12:30 pm  right now" or "sadddddd :["
 def condition(s,n):
-    def t(s,n):
+    def t(s,n):                         #return translate if it is not english language
         tmp='en'                           
         try:
             en=translator.translate(s,dest="en")
@@ -19,21 +27,20 @@ def condition(s,n):
         else:return f" > {n.name}\n{s}\n{en.text}" 
     z=s.lower()
     a=z.find('en')
-    if a>0:
-        if any(z.rfind(char1,0,a)!=-1 and z.find(char2,a)!=-1 for char1,char2 in zip('[(【','])】')) :
-            return s
+    if a>0 and any(z.rfind(char1,0,a)!=-1 and z.find(char2,a)!=-1 for char1,char2 in zip('[(【','])】')) :
+            return s                    # if [en] 【en】(en) or [smth/en]
     if  any(word in s for word in keyword):
-        return s                     
-    if n.isVerified:
+        return s                         # some time they will translate as"[EN]:she is talking about..."
+    if n.isVerified:                     # eg. "Subaru Ch. 大空スバル​あじ！"
         return t(s,n)
     if any(name ==n.name for name in member):
         return t(s,n)
-    a=s.find(":")
-    if a!=-1 and s.find(":",a+1)==-1:
+    a=s.find(":")                       # some time it will be like "subaru:she is talking about" and I use count as 1 because there will be emoticon like :":_ナンバー1:" or ":_にこにこ:"
+    if a!=-1 and s.find(":",a+1)==-1:   # if you cant hnadle this just delete it
         if len(s)-a<=3:return False
         elif z[a:a+3]in (': 3',':ze'):return False
         elif s[a+1] not in emoji:return s                   
-    return False                                
+    return False                        # you can add case condition by your self
 
 maintranslator={}
 def maintranslatoradd(st):
@@ -118,8 +125,8 @@ transparentcolor="grey"
 root = tk.Tk()
 root.title("translate collector")
 root.bind('<Escape>', lambda e: root.quit())
-root.attributes("-topmost", True)
-try:
+root.attributes("-topmost", True)                                   #always on top of all window
+try:                                                                #try invisible it
     root.wait_visibility(root)
     root.wm_attributes('-alpha',0.9)
     root.attributes("-transparentcolor", transparentcolor)
