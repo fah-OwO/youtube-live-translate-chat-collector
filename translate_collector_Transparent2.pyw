@@ -16,6 +16,8 @@ translator = gt()
 keyword={'talking about'}
 member=set()                                    # if there is a usual translator you can input there name here
 emoji='[',']' ,'(' ,')' ,'<' ,'>','0','1','2','3','4','5','6','7','8','9'       # add this to avoid catching sentence with ':'  some say "it's 12:30 pm  right now" or "sadddddd :["
+transparentcolor="grey"
+color=["aqua","black",transparentcolor]
 def condition(s,n):
     def t(s,n):                         #return translate if it is not english language
         tmp='en'                           
@@ -41,18 +43,19 @@ def condition(s,n):
         elif z[a:a+3]in (': 3',':ze'):return False
         elif s[a+1] not in emoji:return s                   
     return False                        # you can add case condition by your self
-
 maintranslator={}
 def maintranslatoradd(st):
     if st in maintranslator:maintranslator[st]+=1
     else:maintranslator[st]=1
     
-class collector(thr):
-    def __init__(self):
+class collector(threading.Thread):
+    def __init__(self,text,sendertext):
         super(collector,self).__init__()
         self.livechat=False
         self.program_running=True
         self.running=False
+        self.text=text
+        self.sendertext=sendertext
         
         
     def setlink(self,link):
@@ -75,18 +78,17 @@ class collector(thr):
                         d=condition(c.message,c.author)
                         if d:
                             maintranslatoradd(c.author.name)
-                            sendertext.insert(1.0,f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
-                            text.insert(1.0,d+'\n\n')
-                            pos = '{}+{}c'.format('1.0', len(d))
-                            text.tag_add('black','1.0',pos)
+                            self.sendertext.insert(1.0,f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
+                            self.text.insert(1.0,d+'\n\n')
+                            t = threading.Thread(target=addhighlight, args=(d,color,text))
+                            t.start()
                         self.chatdata.tick()
                 except KeyboardInterrupt:
                     self.livechat.terminate()
                     break
             time.sleep(0.1)
     
-clt=collector()
-clt.start()
+
 def start():
     try:
         a= linktext.get("1.0",'end-1c')
@@ -121,17 +123,29 @@ def addkeywordbutton(root,row,columnspan):
     removename=tk.Button(text="remove member",command=lambda:duty('remove','member'),font="Sans 10",width=12)
     removename.grid(row=row,column=column*5,columnspan=columnspan)
     
-transparentcolor="grey"
+def addhighlight(sentence,color,text):
+    pos = '{}+{}c'.format('1.0', len(sentence))
+    text.tag_add(color[0],'1.0',pos)
+    x=len(sentence)
+    for i in range(1,len(color)):
+        time.sleep(x**(i-1))
+        if not text.winfo_exists():break
+        idx=text.search(sentence,'1.0',tk.END)
+        pos = '{}+{}c'.format(idx, len(sentence))
+        text.tag_add(color[i],idx,pos)
+
 root = tk.Tk()
 root.title("translate collector")
 root.bind('<Escape>', lambda e: root.quit())
-root.attributes("-topmost", True)                                   #always on top of all window
-try:                                                                #try invisible it
+root.attributes("-topmost", True)
+try:
     root.wait_visibility(root)
-    root.wm_attributes('-alpha',0.9)
+    # root.wm_attributes('-alpha',0.9)
     root.attributes("-transparentcolor", transparentcolor)
     text = tk.Text(root,height=18,width=30,font="Sans 24",padx=30,pady=30,background=transparentcolor,foreground="white")
-    text.tag_config('black', background='black')
+    for i in color:
+        text.tag_config(i, background=i)
+    # text.tag_config('black', background='black')
 except:
     print(" can't invisible tkinter ,maybe because of your device os ")
     text = tk.Text(root,height=18,width=30,font="Sans 24",padx=30,pady=30)
@@ -146,9 +160,13 @@ senderlabel = tk.Label(root,height=1,width=10,font="Sans 8",text='Sender:')
 senderlabel.grid(row=1,columnspan=4)
 sendertext = tk.Text(root,height=1,width=80,font="Sans 8")
 sendertext.grid(row=1, column=4,columnspan=16)
-
+clt=collector(text,sendertext)
+clt.start()
 root.mainloop()
 print("time:",time.time()-starttime)
 for i,j in maintranslator.items():
     print(i,':',j)
 clt.exit()
+print('close in 3 secs')
+time.sleep(3)
+exit()
