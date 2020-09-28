@@ -1,25 +1,24 @@
-import time
-import tkinter as tk
-from pytchat import LiveChat
-from threading import Thread as thr
-from googletrans import Translator as gt
-
 # if you dont want this window to be on top delete this line: "root.attributes("-topmost", True) "
 
 # how to use :run this and put link on lowest tab and click ok
 # (optional) you can add temporary keyword ore favorite translate by using middle tab and click add keyword/member button
 # (can edit in code) there will be "sender:" tab which show sender and sending counting
 # good luck and welcome to rabbit hole (kusa)
-
+import time
+import tkinter as tk
+from pytchat import LiveChat
+import threading
+from googletrans import Translator as gt
 starttime=time.time()
 translator = gt()
 keyword={'talking about'}
-member=set()                                    # if there is a usual translator you can input there name here
-emoji='[',']' ,'(' ,')' ,'<' ,'>','0','1','2','3','4','5','6','7','8','9'       # add this to avoid catching sentence with ':'  some say "it's 12:30 pm  right now" or "sadddddd :["
+member=set()
+emoji='[',']' ,'(' ,')' ,'<' ,'>','0','1','2','3','4','5','6','7','8','9'
 transparentcolor="grey"
 color=["aqua","black",transparentcolor]
+end=tk.END
 def condition(s,n):
-    def t(s,n):                         #return translate if it is not english language
+    def t(s,n):
         tmp='en'                           
         try:
             en=translator.translate(s,dest="en")
@@ -29,39 +28,43 @@ def condition(s,n):
         else:return f" > {n.name}\n{s}\n{en.text}" 
     z=s.lower()
     a=z.find('en')
-    if a>0 and any(z.rfind(char1,0,a)!=-1 and z.find(char2,a)!=-1 for char1,char2 in zip('[(【','])】')) :
-            return s                    # if [en] 【en】(en) or [smth/en]
+    if a>0:
+        if any(z.rfind(char1,0,a)!=-1 and z.find(char2,a)!=-1 for char1,char2 in zip('[(【','])】')) :
+            return s
     if  any(word in s for word in keyword):
-        return s                         # some time they will translate as"[EN]:she is talking about..."
-    if n.isVerified:                     # eg. "Subaru Ch. 大空スバル​あじ！"
+        return s                     
+    if n.isVerified:
         return t(s,n)
     if any(name ==n.name for name in member):
         return t(s,n)
-    a=s.find(":")                       # some time it will be like "subaru:she is talking about" and I use count as 1 because there will be emoticon like :":_ナンバー1:" or ":_にこにこ:"
-    if a!=-1 and s.find(":",a+1)==-1:   # if you cant hnadle this just delete it
+    a=s.find(":")
+    if a!=-1 and s.find(":",a+1)==-1:
         if len(s)-a<=3:return False
         elif z[a:a+3]in (': 3',':ze'):return False
         elif s[a+1] not in emoji:return s                   
-    return False                        # you can add case condition by your self
+    return False                                
+
 maintranslator={}
 def maintranslatoradd(st):
     if st in maintranslator:maintranslator[st]+=1
     else:maintranslator[st]=1
     
 class collector(threading.Thread):
-    def __init__(self,text,sendertext):
+    def __init__(self,text):
         super(collector,self).__init__()
         self.livechat=False
         self.program_running=True
         self.running=False
         self.text=text
-        self.sendertext=sendertext
         
         
     def setlink(self,link):
+        self.running=False
         if self.livechat:self.livechat.terminate()
         self.livechat = LiveChat(link)
         self.running=True
+        t = threading.Thread(target=addtext, args=('collecting\n > '+ link,color,self.text))
+        t.start()
 
     def exit(self):
         if self.livechat:self.livechat.terminate()
@@ -78,9 +81,7 @@ class collector(threading.Thread):
                         d=condition(c.message,c.author)
                         if d:
                             maintranslatoradd(c.author.name)
-                            self.sendertext.insert(1.0,f"[ >{c.author.name} ({maintranslator[c.author.name]})]")
-                            self.text.insert(1.0,d+'\n\n')
-                            t = threading.Thread(target=addhighlight, args=(d,color,text))
+                            t = threading.Thread(target=addtext, args=(d,color,self.text))
                             t.start()
                         self.chatdata.tick()
                 except KeyboardInterrupt:
@@ -89,84 +90,96 @@ class collector(threading.Thread):
             time.sleep(0.1)
     
 
-def start():
+def start(a,clt):
     try:
-        a= linktext.get("1.0",'end-1c')
-        text.insert(1.0,'collecting\n > '+ a+'\n')
         clt.setlink(a)
     except Exception as e:
         print(e)
 
-def addkeywordbutton(root,row,columnspan):
-    column=columnspan
-    entertext=tk.Text(root,height=1,width=16,font="Sans 15")
-    entertext.grid(row=row,column=column*2,columnspan=columnspan*2)
-    ds={'key word':keyword,'member':member}
-    def duty(mode,setname):
-        set=ds[setname]
-        a=entertext.get("1.0",'end-1c')
-        s=mode+' '+setname+': "'+ a+'"'
-        if 'add' ==mode:
-            if a in set:s='"'+a+'" already in '+setname
-            else:set.add(a)
-        elif 'remove' ==mode:
-            if a in set:set.remove(a)
-            else:s='no "'+a+'" in'+setname
-        text.insert(1.0,s+'\n'+setname+' now :\n'+str(set)+'\n\n')
-    
-    addkeyword=tk.Button(text="add key word",command=lambda:duty('add','key word'),font="Sans 10",width=12)
-    addkeyword.grid(row=row,column=0,columnspan=columnspan)
-    addname=tk.Button(text="add member",command=lambda:duty('add','member'),font="Sans 10",width=12)
-    addname.grid(row=row,column=column,columnspan=columnspan)
-    removekeyword=tk.Button(text="remove key word",command=lambda:duty('remove','key word'),font="Sans 10",width=12)
-    removekeyword.grid(row=row,column=column*4,columnspan=columnspan)
-    removename=tk.Button(text="remove member",command=lambda:duty('remove','member'),font="Sans 10",width=12)
-    removename.grid(row=row,column=column*5,columnspan=columnspan)
-    
-def addhighlight(sentence,color,text):
-    pos = '{}+{}c'.format('1.0', len(sentence))
-    text.tag_add(color[0],'1.0',pos)
+def addtext(sentence,color,text):
+    text.insert(end,sentence+'\n\n')
     x=len(sentence)
+    idx=text.search(sentence,'1.0',tk.END)
+    pos = '{}+{}c'.format(idx, x)
+    text.tag_add(color[0],idx,pos)
     for i in range(1,len(color)):
-        time.sleep(x**(i-1))
+        time.sleep(20*(i-1)+1)
         if not text.winfo_exists():break
         idx=text.search(sentence,'1.0',tk.END)
-        pos = '{}+{}c'.format(idx, len(sentence))
+        pos = '{}+{}c'.format(idx, x)
         text.tag_add(color[i],idx,pos)
-
-root = tk.Tk()
-root.title("translate collector")
-root.bind('<Escape>', lambda e: root.quit())
-root.attributes("-topmost", True)
-try:
+    text.delete('1.0',pos)
+ds={'keyword':keyword,'member':member}
+def duty(a,mode='add',setname='keyword',text=False):
+    if type(a)==type(list()):
+        if len (a)==1:a=a[0]
+        elif len (a)==2:a,mode=a[:]
+        elif len (a)==3:a,mode,setname=a[:]
+        else:return
+    set=ds[setname]
+    s=mode+' '+setname+': "'+ a+'"'
+    if 'add' ==mode:
+        if a in set:s='"'+a+'" already in '+setname
+        else:set.add(a)
+    elif 'remove' ==mode:
+        if a in set:set.remove(a)
+        else:s='no "'+a+'" in'+setname
+    if text:
+        addtext(s+'\n'+setname+' now :\n'+str(set),color,text)
+    else:
+        print(s+'\n'+setname+' now :\n'+str(set)+'\n\n')
+    
+def command(root,text):
+    while text.winfo_exists():
+        a=input()
+        if a=="exit":
+            root.quit()
+            break
+        elif a[:5]=="link:":eval('start(a[5:])')#start(a[5:])
+        elif a[:5]=="eval:":
+            try :eval(a[5:])
+            except Exception as e:print(e)
+        elif len(a)<1:continue
+        else:
+            if "'" in a:
+                x=a.find("'")+1
+                y=a.find("'",x)
+                if y+3>len(a):x=[a[x:y]]
+                else:x=[a[x:y]]+a[y+1:].split()
+            elif '"' in a:
+                x=a.find('"')+1
+                y=a.find('"',x)
+                if y+3>len(a):x=[a[x:y]]
+                else:x=[a[x:y]]+a[y+1:].split()
+            else:
+                x=a.split()
+            print(x)
+            try:duty(x,text=text)
+            except Exception as e:print(e)
+def main():
+    root = tk.Tk()
+    w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+    root.wm_attributes('-fullscreen','true')
+    root.attributes("-topmost", True)
     root.wait_visibility(root)
-    # root.wm_attributes('-alpha',0.9)
     root.attributes("-transparentcolor", transparentcolor)
-    text = tk.Text(root,height=18,width=30,font="Sans 24",padx=30,pady=30,background=transparentcolor,foreground="white")
-    for i in color:
+    text = tk.Text(root,height=h,width=w,font="Sans 24",background=transparentcolor,foreground="white",padx=30,pady=30)
+    for i in color[:-1]:
         text.tag_config(i, background=i)
-    # text.tag_config('black', background='black')
-except:
-    print(" can't invisible tkinter ,maybe because of your device os ")
-    text = tk.Text(root,height=18,width=30,font="Sans 24",padx=30,pady=30)
-text.grid(row=0,columnspan=20)
-linktext = tk.Text(root,height=1,width=40,font="Sans 15",padx=20,pady=10)
-linktext.grid(row=3, column=0,columnspan=16)
-linkbutton=tk.Button(text="ok",command=start,font="Sans 15",width=8)
-linkbutton.grid(row=3, column=16,columnspan=4)
+    text.tag_config(color[-1], background=color[-1],foreground=color[-1])
+    text.pack()
 
-addkeywordbutton(root,2,3)
-senderlabel = tk.Label(root,height=1,width=10,font="Sans 8",text='Sender:')
-senderlabel.grid(row=1,columnspan=4)
-sendertext = tk.Text(root,height=1,width=80,font="Sans 8")
-sendertext.grid(row=1, column=4,columnspan=16)
-clt=collector(text,sendertext)
-clt.start()
-root.mainloop()
-print("time:",time.time()-starttime)
-for i,j in maintranslator.items():
-    print(i,':',j)
-clt.exit()
-print('close in 3 secs')
-time.sleep(3)
-exit()
+    clt=collector(text)
+    clt.start()
+    start(input('link:'),clt)
+    print("command:\n\t(smt) add keyword")
+    commandthread=threading.Thread(target=command,args=(root,text))
+    commandthread.start()
+    root.mainloop()
+    clt.exit()
+    print("time:",time.time()-starttime)
+    for i,j in maintranslator.items():
+        print(i,':',j)
+    input("press enter to exit")
+if __name__ == "__main__":
+    main()
