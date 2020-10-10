@@ -29,7 +29,7 @@ PS: case sensitive that I have founded and add to my code
 PS2: if you use formobile/ Tkinter pyw Version you can modify keyword by your self while running~~~~
 
 [pytchat]:<https://github.com/taizan-hokuto/pytchat>
-[python shell]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/translate_collector.py>
-[tkinter]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/translate_collector_tk.py>
-[tkintet pyw]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/translate_collector_tk_pyw.pyw>
-[for Android]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/TCforAndroid.py>
+[python shell]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/testtype/translate_collector.py>
+[tkinter]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/testtype/translate_collector_tk.py>
+[tkintet pyw]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/testtype/translate_collector_tk_pyw.pyw>
+[for Android]: <https://github.com/fah-OwO/youtube-live-translate-chat-collector/blob/master/testtype/TCforAndroid.py>
