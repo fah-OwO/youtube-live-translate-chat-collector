@@ -6,17 +6,28 @@ Using [pytchat]
 1) "pip install pytchat" or "python -m pip install pytchat"
 2) copy my code and run it
 3) put link as "https://www.youtube.com/watch?v=aaaaaaaaaaaa" or id like "aaaaaaaaaa" to shell and press enter
-4) check your clip what translator will always translate as and at case/sensitive case in condition()
+4) check your clip what translator will always translate as, and add case/sensitive case in condition()
 5) enjoy~~
 
 ### What command you can add to shell:
 > after you put link in python shekk yoou will be able to modify collector using this program python shell
- * link:(new link)    : to change current collecting outube link
- * 
- * add/remove keyword :
+ * link:(new link)              : to change current collecting outube link
+ * toggle auto                  : there are auto collect  " : "   with somecondition if it doesn't work out well you should use this command
+ * print all                    : print all object that adjustable
+ * eval: smt                    : to erun smt in program such as eval:print(maintranslator)
+ * exit                         : to exit
+ * 'smt' add  keyword/member    : add 'smt' to keyword if there are 'smt' in sender message, it will show up on screen
+ * 'smt' remove keyword/member  : remove 'smt' from keyword
+ * 'smt' add/remove blockkeyword/blockmember : default for blockkeyword is '[ES]' for avoid catchin "[ES]:" or espanish translate
+ 
+### After program end
+ It will show who has the most translate 
+ Press Enter to exit
+
+## thx for using my code~
+
 
 ### Test type:
-
 there are 4 test type
 If you don't like my main version you can use another version in [testtype folder]
 
