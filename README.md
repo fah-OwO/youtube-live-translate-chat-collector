@@ -37,7 +37,7 @@ If you don't like my main version you can use another version in [testtype folde
 If you don't have a video to test ther will always be translator on sheep chanel.Try it there!
 
 PS: case sensitive that I have founded and add to my code
-[en] [eng] [EN] [ENG] 【en】【eng】(en) (eng) [(smth)/en]([英訳/EN]) or "she is talking about something" ore even with out[en] but use "she:smth" instead...
+[en] [eng] [EN] [ENG] 【en】【eng】(en) (eng) [(smth)/en]  [英訳/EN] or "she is talking about something" ore even with out[en] but use "she:smth" instead...
 
 
 [pytchat]:<https://github.com/taizan-hokuto/pytchat>
