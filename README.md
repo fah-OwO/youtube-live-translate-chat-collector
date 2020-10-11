@@ -7,7 +7,7 @@ Using [pytchat]
 ### 5 steps to go:
 1) "pip install pytchat" or "python -m pip install pytchat"
 2) copy my code and run it
-3) put link as "https://www.youtube.com/watch?v=aaaaaaaaaaaa" or id like "aaaaaaaaaa" to shell and press enter
+3) put link as "https://www.youtube.com/watch?v=79ENOpKJG64" or id like "79ENOpKJG64" to shell and press enter
 4) check your clip what translator will always translate as, and add case/sensitive case in condition()
 5) enjoy~~
 
