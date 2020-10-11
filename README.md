@@ -2,6 +2,8 @@
 When I am watching Hololive there will be some guy translate with start message with'[EN]' so I decide to collect it for reading
 Using [pytchat]
 
+## how to use
+
 ### 5 steps to go:
 1) "pip install pytchat" or "python -m pip install pytchat"
 2) copy my code and run it
@@ -10,7 +12,7 @@ Using [pytchat]
 5) enjoy~~
 
 ### What command you can add to shell:
-> after you put link in python shekk yoou will be able to modify collector using this program python shell
+> after you put link in python shell you will be able to modify collector using this program python shell
  * link:(new link)              : to change current collecting outube link
  * toggle auto                  : there are auto collect  " : "   with somecondition if it doesn't work out well you should use this command
  * print all                    : print all object that adjustable
@@ -24,8 +26,9 @@ Using [pytchat]
  It will show who has the most translate 
  Press Enter to exit
 
-## thx for using my code~
+> thx for using my code~
 
+## some addition detail
 
 ### Test type:
 there are 4 test type
