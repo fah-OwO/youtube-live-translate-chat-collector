@@ -273,15 +273,7 @@ def main():
     for x,y in sorted([(i,j) for j,i in maintranslator.items()]):print(tab_control(y),x)
     clt.exit()
     textor.exit()
-    # return False
-    # if tmp:return True
-    input("press enter to exit")
-    # return False
+    time.sleep(30)
+    return
 if __name__ == "__main__":
     main()
-    # while True:
-    #     try:
-    #         if main():continue
-    #     except Exception as e:
-    #         print(e)
-    #     break
