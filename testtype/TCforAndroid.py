@@ -1,6 +1,4 @@
 import time
-# from time import time.sleep
-import tkinter as tk
 from pytchat import LiveChat
 from threading import Thread as thr
 from googletrans import Translator as gt
